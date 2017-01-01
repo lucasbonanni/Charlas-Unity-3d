@@ -5,26 +5,27 @@ using UnityEngine.AI;
 
 public class ClickToMoveController : MonoBehaviour {
 
-    private NavMeshAgent navMeshAgent;
+    private NavMeshAgent m_NavMeshAgent;
     private Vector3 m_Pos;
-    public Animation m_anim;
+    public Animation m_Anim;
+    public int Coins = 0;
 
-    public NavMeshAgent m_navMesh
+    private NavMeshAgent m_Nav
     {
         get
         {
-            if(this.navMeshAgent == null)
-                navMeshAgent = GetComponent<NavMeshAgent>();
-            return navMeshAgent;
+            if (m_NavMeshAgent == null)
+                m_NavMeshAgent = GetComponent<NavMeshAgent>();
+            return m_NavMeshAgent;
         }
-        set { navMeshAgent = value; }
     }
 
 
     // Use this for initialization
     void Start () {
         m_Pos = transform.position;
-	}
+        Coins = PlayerPrefs.GetInt("Coins", 0);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -35,9 +36,7 @@ public class ClickToMoveController : MonoBehaviour {
             if(Physics.Raycast(sRay,out castHit,1000))
             {
                 m_Pos = castHit.point;
-                m_anim.Play("run");
-                navMeshAgent.SetDestination(m_Pos);
-                navMeshAgent.Resume();
+                m_NavMeshAgent.SetDestination(m_Pos);
             }
             Debug.Log("Click");
             Debug.Log(sRay);
@@ -47,15 +46,15 @@ public class ClickToMoveController : MonoBehaviour {
 
     public void Corre()
     {
-        if(Vector3.Distance(transform.position,m_Pos) <= 1)
+        if(Vector3.Distance(transform.position, m_Pos) <= 1)
         {
-            m_anim.Play("idle");
-            navMeshAgent.Stop();
+            m_Anim.Play("idle");
+            m_Nav.Stop();
         }
         else
         {
-            m_anim.Play("run");
-            navMeshAgent.Resume();
+            m_Anim.Play("run");
+            m_NavMeshAgent.Resume();
         }
     }
 }

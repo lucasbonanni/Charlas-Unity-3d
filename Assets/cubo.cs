@@ -11,14 +11,12 @@ public class cubo : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-        Debug.Log(collision.other.name);
-    }
 
     private void OnTriggerEnter(Collider other)
     {
+        ClickToMoveController sPlayer = other.gameObject.GetComponent<ClickToMoveController>();
+        sPlayer.Coins++;
+        PlayerPrefs.SetInt("Coins", sPlayer.Coins);
         Destroy(gameObject);
         Debug.Log(other.name);
     }
