@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class ClickToMoveController : MonoBehaviour {
 
@@ -7,6 +8,8 @@ public class ClickToMoveController : MonoBehaviour {
     private Vector3 m_Pos;
     public Animation m_Anim;
     public int Coins = 0;
+    public Text m_CoinsText;
+
 
     private NavMeshAgent m_Nav
     {
@@ -23,6 +26,7 @@ public class ClickToMoveController : MonoBehaviour {
     void Start () {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
+        this.m_CoinsText.text = string.Format("Coins {0}", Coins);
     }
 	
 	// Update is called once per frame
@@ -54,5 +58,12 @@ public class ClickToMoveController : MonoBehaviour {
             m_Anim.Play("run");
             m_NavMeshAgent.Resume();
         }
+    }
+
+    public void ActualizarMonedas()
+    {
+        Coins++;
+        PlayerPrefs.SetInt("Coins", Coins);
+        this.m_CoinsText.text = string.Format("Coins {0}", Coins);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class cubo : MonoBehaviour {
 
@@ -15,8 +13,7 @@ public class cubo : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         ClickToMoveController sPlayer = other.gameObject.GetComponent<ClickToMoveController>();
-        sPlayer.Coins++;
-        PlayerPrefs.SetInt("Coins", sPlayer.Coins);
+        sPlayer.ActualizarMonedas();
         Destroy(gameObject);
         Debug.Log(other.name);
     }
