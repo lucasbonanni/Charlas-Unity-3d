@@ -6,9 +6,20 @@ public class ClickToMoveController : MonoBehaviour {
 
     private NavMeshAgent m_NavMeshAgent;
     private Vector3 m_Pos;
-    public Animation m_Anim;
+    public Animation m_anim;
     public int Coins = 0;
     public Text m_CoinsText;
+
+    public Animation m_PlayerAnimation {
+        get
+        {
+            if(m_anim == null)
+            {
+                m_anim = GetComponent<Animation>();
+            }
+            return m_anim;
+        }
+    }
 
 
     private NavMeshAgent m_Nav
@@ -16,7 +27,9 @@ public class ClickToMoveController : MonoBehaviour {
         get
         {
             if (m_NavMeshAgent == null)
-                m_NavMeshAgent = GetComponent<NavMeshAgent>();
+            {
+                m_NavMeshAgent = GetComponent<NavMeshAgent>(); 
+            }
             return m_NavMeshAgent;
         }
     }
@@ -50,12 +63,12 @@ public class ClickToMoveController : MonoBehaviour {
     {
         if(Vector3.Distance(transform.position, m_Pos) <= 1)
         {
-            m_Anim.Play("idle");
+            m_PlayerAnimation.Play("idle");
             m_Nav.Stop();
         }
         else
         {
-            m_Anim.Play("run");
+            m_PlayerAnimation.Play("run");
             m_NavMeshAgent.Resume();
         }
     }
