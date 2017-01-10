@@ -9,6 +9,22 @@ public class ClickToMoveController : MonoBehaviour {
     public Animation m_anim;
     public int Coins = 0;
     public Text m_CoinsText;
+    public Image Vida;
+    public Slider healthSlider;
+
+    public int m_MaxLife;
+
+    public int m_Life;
+
+    public void Damage()
+    {
+        //m_Life -= 1;
+        if(healthSlider.value - 10 >= 0)
+        {
+            //Vida.fillAmount -= 10;
+            healthSlider.value -= 10;
+        }
+    }
 
     public Animation m_PlayerAnimation {
         get
@@ -40,6 +56,9 @@ public class ClickToMoveController : MonoBehaviour {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
         this.m_CoinsText.text = string.Format("Coins {0}", Coins);
+        
+        Vida.fillAmount = 100;
+        healthSlider.value = 100;
     }
 	
 	// Update is called once per frame

@@ -12,7 +12,10 @@ public class cubo : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        ClickToMoveController sPlayer = other.gameObject.GetComponent<ClickToMoveController>();
+        ClickToMoveController sPlayer = null;
+        if (other.gameObject.tag.ToLower() == "player")
+            sPlayer = other.gameObject.GetComponent<ClickToMoveController>();
+
         sPlayer.ActualizarMonedas();
         Destroy(gameObject);
         Debug.Log(other.name);

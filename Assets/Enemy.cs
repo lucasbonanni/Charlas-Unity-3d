@@ -7,6 +7,23 @@ public class Enemy : MonoBehaviour {
 
     private Animation m_Anim;
 
+    private Animator m_Animator;
+
+    private ClickToMoveController m_Player;
+
+    public Animator characterAnimator
+    {
+        get
+        {
+            if (m_Animator == null)
+            {
+                m_Animator = GetComponent<Animator>();
+            }
+            return m_Animator;
+        }
+    }
+
+
     public Animation SkeletonAnimation
     {
         get
@@ -33,25 +50,71 @@ public class Enemy : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        SkeletonAnimation.Play("idle");
+        m_Player = GameObject.FindGameObjectWithTag("Player").GetComponent<ClickToMoveController>();
+        if (SkeletonAnimation != null)
+        {
+            SkeletonAnimation.Play("idle");
+        }
+        if(characterAnimator != null)
+        {
+            characterAnimator.SetInteger("Movimiento", 0);
+        }
     }
 	
+    public void Run()
+    {
+        SetMovimiento(1);
+    }
+
+    public void Idle()
+    {
+        SetMovimiento(1);
+    }
+
+
+    void SetMovimiento(int xValor)
+    {
+        if (characterAnimator != null)
+            characterAnimator.SetInteger("Movimiento", xValor);
+    }
+
+    void Ataca(bool valor)
+    {
+        if(characterAnimator != null)
+        {
+            characterAnimator.SetBool("Ataca", valor);
+        }
+    }
+
+    void OnAttack()
+    {
+        Debug.Log("Ataca");
+    }
+
 	// Update is called once per frame
 	void Update () {
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        
+        if (m_Player != null)
         {
             Vector3 sPosPlayer = GameObject.FindGameObjectWithTag("Player").transform.position;
             if (Vector3.Distance(transform.position, sPosPlayer) <= m_stop_distance)
             {
+                
+                if (m_Anim != null)
+                    SkeletonAnimation.Play("attack");
+                Idle();
+                Ataca(true);
+                m_Player.Damage();
                 transform.LookAt(sPosPlayer);
-                SkeletonAnimation.Play("attack");
                 m_Nav.Stop();
             }
             else
             {
                 m_Nav.SetDestination(sPosPlayer);
-                SkeletonAnimation.Play("run");
+                if (SkeletonAnimation != null)
+                    SkeletonAnimation.Play("run");
+                Ataca(false);
+                Run();
                 m_NavMeshAgent.Resume();
             }
 
