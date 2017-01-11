@@ -54,8 +54,8 @@ public class ClickToMoveController : MonoBehaviour {
 
     void Awake()
     {
-        characterLife = m_MaxLife;
-        healthSlider.maxValue = m_MaxLife;
+        //characterLife = m_MaxLife;
+        //healthSlider.maxValue = m_MaxLife;
     }
 
 
@@ -64,8 +64,7 @@ public class ClickToMoveController : MonoBehaviour {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
         this.m_CoinsText.text = string.Format("Coins {0}", Coins);
-        
-        Vida.fillAmount = 100;
+        healthSlider.maxValue = m_MaxLife;
         healthSlider.value = m_MaxLife;
         characterLife = m_MaxLife;
     }
