@@ -12,17 +12,19 @@ public class ClickToMoveController : MonoBehaviour {
     public Image Vida;
     public Slider healthSlider;
 
-    public int m_MaxLife;
+    public const int m_MaxLife = 10000;
+    public int characterLife;
 
     public int m_Life;
 
     public void Damage()
     {
         //m_Life -= 1;
-        if(healthSlider.value - 10 >= 0)
+        if(characterLife - 10 >= 0)
         {
             //Vida.fillAmount -= 10;
-            healthSlider.value -= 10;
+            characterLife -= 10;
+            healthSlider.value = characterLife;
         }
     }
 
@@ -50,15 +52,22 @@ public class ClickToMoveController : MonoBehaviour {
         }
     }
 
+    void Awake()
+    {
+        characterLife = m_MaxLife;
+        healthSlider.maxValue = m_MaxLife;
+    }
 
-    // Use this for initialization
-    void Start () {
+
+        // Use this for initialization
+        void Start () {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
         this.m_CoinsText.text = string.Format("Coins {0}", Coins);
         
         Vida.fillAmount = 100;
-        healthSlider.value = 100;
+        healthSlider.value = m_MaxLife;
+        characterLife = m_MaxLife;
     }
 	
 	// Update is called once per frame
