@@ -63,7 +63,7 @@ public class ClickToMoveController : MonoBehaviour {
         void Start () {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
-        this.m_CoinsText.text = string.Format("Coins {0}", Coins);
+        this.m_CoinsText.text = Coins.ToString();
         healthSlider.maxValue = m_MaxLife;
         healthSlider.value = m_MaxLife;
         characterLife = m_MaxLife;
@@ -104,6 +104,6 @@ public class ClickToMoveController : MonoBehaviour {
     {
         Coins++;
         PlayerPrefs.SetInt("Coins", Coins);
-        this.m_CoinsText.text = string.Format("Coins {0}", Coins);
+        this.m_CoinsText.text = Coins.ToString();
     }
 }
