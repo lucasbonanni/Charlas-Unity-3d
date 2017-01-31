@@ -2,7 +2,8 @@
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class ClickToMoveController : MonoBehaviour {
+public class ClickToMoveController : MonoBehaviour
+{
 
     private NavMeshAgent m_NavMeshAgent;
     private Vector3 m_Pos;
@@ -12,26 +13,39 @@ public class ClickToMoveController : MonoBehaviour {
     public Image Vida;
     public Slider healthSlider;
 
+    public bool m_Die = false;
+
     public const int m_MaxLife = 10000;
     public int characterLife;
 
-    public int m_Life;
 
     public void Damage()
     {
-        //m_Life -= 1;
-        if(characterLife - 10 >= 0)
+        if(characterLife > 0)
         {
-            //Vida.fillAmount -= 10;
             characterLife -= 10;
-            healthSlider.value = characterLife;
+            float sValor = 10;
+            if(healthSlider.value - sValor >= 0)
+            {
+                healthSlider.value -= sValor;
+            }
+            if(characterLife <= 0)
+            {
+                if (!m_Die)
+                {
+                    m_Die = true;
+                    healthSlider.value = 0;
+                    m_PlayerAnimation.Play("die");
+                }
+            }
         }
     }
 
-    public Animation m_PlayerAnimation {
+    public Animation m_PlayerAnimation
+    {
         get
         {
-            if(m_anim == null)
+            if (m_anim == null)
             {
                 m_anim = GetComponent<Animation>();
             }
@@ -46,7 +60,7 @@ public class ClickToMoveController : MonoBehaviour {
         {
             if (m_NavMeshAgent == null)
             {
-                m_NavMeshAgent = GetComponent<NavMeshAgent>(); 
+                m_NavMeshAgent = GetComponent<NavMeshAgent>();
             }
             return m_NavMeshAgent;
         }
@@ -59,8 +73,9 @@ public class ClickToMoveController : MonoBehaviour {
     }
 
 
-        // Use this for initialization
-        void Start () {
+    // Use this for initialization
+    void Start()
+    {
         m_Pos = transform.position;
         Coins = PlayerPrefs.GetInt("Coins", 0);
         this.m_CoinsText.text = Coins.ToString();
@@ -68,27 +83,33 @@ public class ClickToMoveController : MonoBehaviour {
         healthSlider.value = m_MaxLife;
         characterLife = m_MaxLife;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		if(Input.GetMouseButtonDown(0))
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!m_Die)
         {
-            Ray sRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit castHit;
-            if(Physics.Raycast(sRay,out castHit,1000))
+            if (Input.GetMouseButtonDown(0))
             {
-                m_Pos = castHit.point;
-                m_NavMeshAgent.SetDestination(m_Pos);
+                Ray sRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit castHit;
+                if (Physics.Raycast(sRay, out castHit, 1000))
+                {
+                    m_Pos = castHit.point;
+                    m_NavMeshAgent.SetDestination(m_Pos);
+                }
+                Debug.Log("Click");
+                Debug.Log(sRay);
             }
-            Debug.Log("Click");
-            Debug.Log(sRay);
+            Corre();
         }
-        Corre();
-	}
+
+
+    }
 
     public void Corre()
     {
-        if(Vector3.Distance(transform.position, m_Pos) <= 1)
+        if (Vector3.Distance(transform.position, m_Pos) <= 1)
         {
             m_PlayerAnimation.Play("idle");
             m_Nav.Stop();
